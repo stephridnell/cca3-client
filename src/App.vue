@@ -14,6 +14,22 @@
   </div>
 </template>
 
+<script>
+import http from '@/http'
+export default {
+  name: 'AppWrapper',
+  async mounted () {
+    await this.loadPokemon()
+  },
+  methods: {
+    async loadPokemon () {
+      const data = await http.get('pokemon')
+      this.$store.commit('setPokemon', data.pokemon)
+    }
+  }
+}
+</script>
+
 <style lang="scss">
   @import '@/assets/style.scss';
 </style>

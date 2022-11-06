@@ -29,7 +29,7 @@ export default new Vuex.Store({
       state.user = { ...user }
     },
     setPokemon (state, pokemon) {
-      state.user = [...pokemon]
+      state.pokemon = [...pokemon]
     },
     logout (state) {
       window.localStorage.removeItem('user')

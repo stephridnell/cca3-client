@@ -98,6 +98,11 @@ button, .button {
   border: none;
   box-shadow: rgb(243 86 56) 0px 50px 100px -20px, #ff8772 0px 30px 60px -30px;
   display: inline-block;
+  &:disabled {
+    filter: grayscale(90%);
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
   &.ghost {
     background: none;
     color: var(--text-dark);

@@ -16,7 +16,7 @@
               Ready?
             </div>
             <div class="p-12">
-              <button class="button text-20 text-bold" @click="start">
+              <button :disabled="pokemon.length === 0" class="button text-20 text-bold" @click="start">
                 Start
               </button>
             </div>
@@ -34,7 +34,7 @@
 
 <script>
 export default {
-  name: 'LoginView',
+  name: 'GameView',
   data: () => {
     return {
       timeLeft: 3,
@@ -44,6 +44,11 @@ export default {
   },
   beforeDestroy () {
     clearInterval(this.countdownTimer)
+  },
+  computed: {
+    pokemon () {
+      return this.$store.getters.getPokemon
+    }
   },
   methods: {
     start () {
