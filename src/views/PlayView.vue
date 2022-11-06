@@ -12,16 +12,25 @@
             </div>
             <template v-if="currentPokemon">
               <img style="width: 300px; max-width: 100%; filter: brightness(0%); margin-bottom:20px;" :src="currentPokemon.imageUrl">
-              <pokemon-input
-                :key="currentPokemon.name"
-                :length="currentPokemon.name.length"
-                :value="fullValue"
-                @input="typed"
-                inputColor="#31bce6"
-              />
+              <div class="pokemon-input-container">
+                <pokemon-input
+                  :key="currentPokemon.name"
+                  :length="currentPokemon.name.length"
+                  :value="fullValue"
+                  @input="typed"
+                  inputColor="#31bce6"
+                />
+              </div>
             </template>
 
-            {{ fullValue }}
+            <div class="text-14 mt-40" style="text-align:center;">
+              Hint
+              <div style="display:flex;">
+                <div style="width: 40px" v-for="(char, i) in revealedLetters" :key="char+i">
+                  {{ char }}
+                </div>
+              </div>
+            </div>
 
             <div class="p-24 mt-20">
               <button class="button text-20 text-bold" @click="pass">
@@ -74,12 +83,15 @@ export default {
     return {
       timeLeft: TIME,
       gameTimer: null,
+      letterRevealTimer: null,
       currentPokemon: null,
       fullValue: '',
       results: [],
       gameComplete: false,
       completionText: '',
       resultsStored: false,
+      revealedLetters: [],
+      currentNameLength: 0,
       completionTextOptions: [
         'Nice!',
         'Gotta catch em all!',
@@ -100,11 +112,12 @@ export default {
 
     window.addEventListener('keydown', this.escPass)
 
-    this.currentPokemon = this.getRandomPokemon()
+    this.getRandomPokemon()
     this.start()
   },
   beforeDestroy () {
     clearInterval(this.gameTimer)
+    clearInterval(this.letterRevealTimer)
     window.removeEventListener('keydown', this.escPass)
   },
   computed: {
@@ -122,6 +135,18 @@ export default {
     }
   },
   methods: {
+    revealLetter () {
+      const hiddenIndeces = []
+      this.revealedLetters.forEach((char, i) => {
+        if (char === '_') {
+          hiddenIndeces.push(i)
+        }
+      })
+
+      const randomNumber = Math.floor(Math.random() * hiddenIndeces.length)
+      const idxToReveal = hiddenIndeces[randomNumber]
+      this.revealedLetters[idxToReveal] = this.currentPokemon.name[idxToReveal]
+    },
     escPass (event) {
       if (event.key === 'Escape' && !this.gameComplete) {
         this.pass()
@@ -135,7 +160,7 @@ export default {
       this.results = []
       this.fullValue = ''
       this.timeLeft = TIME
-      this.currentPokemon = this.getRandomPokemon()
+      this.getRandomPokemon()
       this.start()
     },
     pass () {
@@ -146,7 +171,7 @@ export default {
         name: this.currentPokemon.name
       })
       this.fullValue = ''
-      this.currentPokemon = this.getRandomPokemon()
+      this.getRandomPokemon()
     },
     async typed (e) {
       const lc = e.toLowerCase()
@@ -160,12 +185,14 @@ export default {
         })
         this.fullValue = ''
         await this.$nextTick()
-        this.currentPokemon = this.getRandomPokemon()
+        this.getRandomPokemon()
       }
     },
     getRandomPokemon () {
       const randomNumber = Math.floor(Math.random() * (TOTAL_POKEMON - 1 + 1) + 1)
-      return this.pokemon[randomNumber]
+      this.currentPokemon = this.pokemon[randomNumber]
+      this.currentNameLength = this.currentPokemon.name.length
+      this.revealedLetters = new Array(this.currentNameLength).fill('_')
     },
     addTime () {
       this.timeLeft += 2
@@ -200,6 +227,13 @@ export default {
         }
         this.timeLeft -= 1
       }, 1000)
+
+      this.letterRevealTimer = setInterval(() => {
+        if (this.timeLeft <= 0) {
+          clearInterval(this.letterRevealTimer)
+        }
+        this.revealLetter()
+      }, 1500)
     }
   }
 }
