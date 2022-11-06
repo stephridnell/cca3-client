@@ -98,17 +98,14 @@ export default {
       this.$router.push('/')
     }
 
-    window.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && !this.gameComplete) {
-        this.pass()
-      }
-    }, true)
+    window.addEventListener('keydown', this.escPass)
 
     this.currentPokemon = this.getRandomPokemon()
     this.start()
   },
   beforeDestroy () {
     clearInterval(this.gameTimer)
+    window.removeEventListener('keydown', this.escPass)
   },
   computed: {
     pokemon () {
@@ -125,6 +122,11 @@ export default {
     }
   },
   methods: {
+    escPass (event) {
+      if (event.key === 'Escape' && !this.gameComplete) {
+        this.pass()
+      }
+    },
     getRandomCompleteText () {
       const randomNumber = Math.floor(Math.random() * (this.completionTextOptions.length + 1))
       this.completionText = this.completionTextOptions[randomNumber]
