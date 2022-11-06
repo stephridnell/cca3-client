@@ -1,13 +1,13 @@
 <template>
   <div class="game">
     <div class="container p-8">
-      <div class="card mw-480">
+      <div class="card" style="max-width: 824px">
         <div class="card-body plr-32 ptb-12">
           <div class="card-header pb-12">
             Who's that pokemon?
           </div>
           <template v-if="!gameComplete">
-            <div class="text-64">
+            <div class="text-64" v-if="timeLeft >= 0">
               {{ timeLeft }}
             </div>
             <template v-if="currentPokemon">
@@ -27,6 +27,9 @@
               <button class="button text-20 text-bold" @click="pass">
                 Pass
               </button>
+              <div class="text-14">
+                (or press Esc)
+              </div>
             </div>
           </template>
           <template v-else>
@@ -34,7 +37,7 @@
             <div>Your score: <strong>{{ score }}</strong></div>
             <div class="encounter-grid">
               <div class="encounter" v-for="(pokemon, index) in results" :key="index">
-                <img style="width:80px;max-width:100%;" :src="pokemon.imageUrl">
+                <img style="width:140px;max-width:100%;" :src="pokemon.imageUrl">
                 <div>
                   <span class="text-bold" style="text-transform: capitalize;">{{ pokemon.name }}</span>
                 </div>
@@ -94,6 +97,13 @@ export default {
     if (this.pokemon.length === 0) {
       this.$router.push('/')
     }
+
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !this.gameComplete) {
+        this.pass()
+      }
+    }, true)
+
     this.currentPokemon = this.getRandomPokemon()
     this.start()
   },

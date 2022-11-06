@@ -6,7 +6,7 @@
           <div class="card-header pb-12">
             {{ currentUser.name }}
           </div>
-          <div class="mb-24" v-if="userStats.encounters.length === 0">
+          <div class="mb-24" v-if="userStats.encounters?.length === 0">
             Come back after playing to see your stats!
           </div>
           <template v-else>

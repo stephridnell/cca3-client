@@ -74,7 +74,8 @@ export default {
     },
     handleInputFocus (event, index) {
       // only do stuff on alphanumeric or backspace
-      if ((event.keyCode < 48 || event.keyCode > 90) && event.keyCode !== 8) {
+      const allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+      if (!allowedKeys.includes(event.key) && event.key !== 'Backspace') {
         return
       }
 
@@ -84,7 +85,7 @@ export default {
       }
 
       // handle backspace
-      if (event.keyCode === 8) {
+      if (event.key === 'Backspace') {
         // cant backspace from first field
         if (index === 0) {
           return
