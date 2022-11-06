@@ -1,6 +1,6 @@
 <template>
   <div class="register">
-    <div class="container p-30">
+    <div class="container p-8">
       <div class="card mw-480">
         <div class="card-body p-12">
           <div class="card-header">
