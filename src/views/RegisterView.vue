@@ -29,7 +29,7 @@
               {{ formError }}
             </div>
             <div class="d-flex ai-center jc-sb p-16">
-              <button class="button text-bold" type="submit">
+              <button :disabled="loading" class="button text-bold" type="submit">
                 Register
               </button>
               <router-link class="button ghost" to="/login">
@@ -59,7 +59,8 @@ export default {
       emailError: '',
       nameError: '',
       passwordError: '',
-      formError: ''
+      formError: '',
+      loading: false
     }
   },
   methods: {
@@ -84,11 +85,14 @@ export default {
       if (this.passwordError || this.emailError || this.nameError) {
         return
       }
+      this.loading = true
       try {
         await http.post('/auth/register', { email: this.email, password: this.password, name: this.name })
         this.$router.push('/login')
       } catch (e) {
         this.formError = e.msg
+      } finally {
+        this.loading = false
       }
     }
   }
