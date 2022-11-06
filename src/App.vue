@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div style="align-items: center; justify-content: center; width: 100%; display: flex;" class="p-24">
-      <img style="max-width: 480px;" alt="title-image" src="./assets/Whos-that-pokemon.png">
+      <img class="logo" alt="title-image" src="./assets/Whos-that-pokemon.png">
     </div>
     <nav>
       <router-link to="/">New game</router-link> |
