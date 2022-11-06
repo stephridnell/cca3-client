@@ -4,18 +4,22 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const initialUser = {
-  id: '',
+  userId: '',
   name: '',
   email: ''
 }
 
 export default new Vuex.Store({
   state: {
-    user: initialUser
+    user: initialUser,
+    pokemon: []
   },
   getters: {
     currentUser (state) {
       return state.user
+    },
+    getPokemon (state) {
+      return state.pokemon
     }
   },
   mutations: {
@@ -23,6 +27,9 @@ export default new Vuex.Store({
     setCurrentUser (state, user) {
       window.localStorage.setItem('user', JSON.stringify(user))
       state.user = { ...user }
+    },
+    setPokemon (state, pokemon) {
+      state.user = [...pokemon]
     },
     logout (state) {
       window.localStorage.removeItem('user')
