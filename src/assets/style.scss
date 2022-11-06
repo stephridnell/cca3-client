@@ -112,6 +112,20 @@ button, .button {
   }
 }
 
+.encounter-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.encounter {
+  padding: 12px;
+  margin: 12px;
+  border: 1px solid #f1f1f1;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  text-align: center;
+}
+
 input {
   width: 100%;
   max-height: 40px;

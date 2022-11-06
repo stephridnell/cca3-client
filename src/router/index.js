@@ -29,6 +29,11 @@ const routes = [
     path: '/leaderboard',
     name: 'leaderboard',
     component: () => import(/* webpackChunkName: "leaderboard" */ '../views/LeaderboardView.vue')
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: () => import(/* webpackChunkName: "profile" */ '../views/ProfileView.vue')
   }
 ]
 
