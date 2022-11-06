@@ -8,19 +8,19 @@
           </div>
           <form class="w-100" @submit="register">
             <div class="p-12">
-              <input type="text" v-model="email" placeholder="email" />
+              <input class="input" type="text" v-model="email" placeholder="email" />
               <div class="form-error" v-if="emailError">
                 {{ emailError }}
               </div>
             </div>
             <div class="p-12">
-              <input type="text" v-model="name" placeholder="name" />
+              <input class="input" type="text" v-model="name" placeholder="name" />
               <div class="form-error" v-if="nameError">
                 {{ nameError }}
               </div>
             </div>
             <div class="p-12">
-              <input type="password" v-model="password" placeholder="password" />
+              <input class="input" type="password" v-model="password" placeholder="password" />
               <div class="form-error">
                 {{ passwordError }}
               </div>
