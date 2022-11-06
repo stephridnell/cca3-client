@@ -3,6 +3,7 @@
 :root {
   --text-dark:  #37384c;
   --text-light: #fff;
+  --red: rgba(255,121,114,1);
 }
 
 body {
@@ -113,6 +114,14 @@ input {
   font-size: 1rem;
   position: relative;
   z-index: 99;
+  margin-bottom: 20px;
+}
+
+.form-error {
+  color: var(--red);
+  padding: 0 12px;
+  font-size: 14px;
+  margin-top: -20px;
 }
 
 a {
