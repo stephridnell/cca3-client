@@ -47,7 +47,7 @@
               Try again?
             </div>
             <div class="p-12">
-              <button :disabled="pokemon.length === 0" class="button text-20 text-bold" @click="restart">
+              <button :disabled="!resultsStored" class="button text-20 text-bold" @click="restart">
                 Restart
               </button>
             </div>
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-// import http from '@/http'
+import http from '@/http'
 import PokemonInput from '@/components/PokemonInput.vue'
 
 export default {
@@ -73,6 +73,7 @@ export default {
       results: [],
       gameComplete: false,
       completionText: '',
+      resultsStored: false,
       completionTextOptions: [
         'Nice!',
         'Gotta catch em all!',
@@ -99,6 +100,9 @@ export default {
   computed: {
     pokemon () {
       return this.$store.getters.getPokemon
+    },
+    currentUser () {
+      return this.$store.getters.currentUser
     },
     score () {
       return this.results.reduce((prev, curr) => {
@@ -151,7 +155,17 @@ export default {
     addTime () {
       this.timeLeft += 2
     },
-    endGame () {
+    async endGame () {
+      await http.post('game/end', {
+        userId: this.currentUser.userId,
+        results: this.results.map(el => {
+          return {
+            correct: el.correct,
+            pokemon: el.pokemon
+          }
+        })
+      })
+      this.resultsStored = true
       this.getRandomCompleteText()
       this.gameComplete = true
       this.results.push({
@@ -163,6 +177,7 @@ export default {
     },
     start () {
       this.gameComplete = false
+      this.resultsStored = false
       this.gameTimer = setInterval(() => {
         if (this.timeLeft <= 0) {
           clearInterval(this.gameTimer)
