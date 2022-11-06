@@ -26,7 +26,7 @@ npm run lint
 
 ### build and tag image
 
-`docker build -f Dockerfile.prod -t cca3:latest .`
+`docker build -f Dockerfile -t cca3:latest .`
 
 ### run container
 

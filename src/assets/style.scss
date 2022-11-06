@@ -1,0 +1,276 @@
+@import url("https://use.typekit.net/pdn5tls.css");
+
+:root {
+  --text-dark:  #37384c;
+  --text-light: #fff;
+}
+
+body {
+  width: 100%;
+  min-height: 100vh;
+}
+
+html {
+  font-family: proxima-soft, sans-serif;
+  background: rgb(255,121,114);
+  background: linear-gradient(180deg, rgba(255,121,114,1) 0%, rgba(253,194,115,1) 100%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+}
+
+html, * {
+  box-sizing : border-box;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  gap: 70px;
+}
+
+.box {
+  display: grid;
+  place-items: center;
+}
+
+.card-wrapper {
+  width: 100%;
+  height: 100%;
+  border-radius: 64px;
+  box-shadow: rgb(243 86 56) 0px 50px 100px -20px, #ff8772 0px 30px 60px -30px;
+}
+
+.card-header {
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: bold;
+  color: rgba(255,121,114,1);
+  padding: 16px;
+}
+
+.shadow {
+  box-shadow: rgb(243 86 56) 0px 50px 100px -20px, #ff8772 0px 30px 60px -30px;
+}
+
+#app {
+  font-size: 20px;
+  padding: 10px;
+  height: 100%;
+}
+
+h2 {
+  margin: 0;
+}
+
+button, .button {
+  font-family: proxima-soft, sans-serif;
+  font-size: 14px;
+  color: #fff;
+  background: linear-gradient(90deg, #ff9074 0%, #fe5b6d 100%);
+  border-radius: 50px;
+  outline: none;
+  padding: 0.4rem 1.4rem;
+  margin-bottom: 0;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: none;
+  box-shadow: rgb(243 86 56) 0px 50px 100px -20px, #ff8772 0px 30px 60px -30px;
+  display: inline-block;
+  &.ghost {
+    background: none;
+    color: var(--text-dark);
+    &:hover {
+      background: #ffedea;
+    }
+  }
+}
+
+input {
+  width: 100%;
+  max-height: 40px;
+  font-family: proxima-soft, sans-serif;
+  box-sizing: border-box;
+  padding: 15px 20px;
+  background: #ffedea;
+  border: 1px solid transparent;
+  border-radius: 50px;
+  font-size: 1rem;
+  position: relative;
+  z-index: 99;
+}
+
+a {
+  text-decoration: none;
+}
+
+.d-flex {
+ display: flex;
+}
+
+.fd-col {
+  flex-direction: column;
+}
+
+.jc-sb {
+  justify-content: space-between;
+}
+
+.jc-center {
+  justify-content: center;
+}
+
+.jc-center {
+  justify-content: center;
+}
+
+.ai-center {
+  align-items: center;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.h-100 {
+  height: 100%;
+}
+
+.red {
+  color: var(--red);
+}
+
+.blue {
+  color: #73ffee;
+}
+
+.yellow {
+  color: #ffcc70;
+}
+
+.white {
+  color: #fff;
+}
+
+.greyscale {
+  filter: grayscale(90%);
+  opacity: 0.7;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.strikethrough {
+  text-decoration: line-through;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  border-radius: 16px;
+  border: none;
+  box-shadow: rgb(243 86 56) 0px 50px 100px -20px, #ff8772 0px 30px 60px -30px;
+  &.no-stretch {
+    width: unset;
+    height: unset;
+  }
+}
+
+.card-body {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.text-caps {
+  text-transform: uppercase;
+}
+
+@for $i from 0 through 500 {
+  .text-#{$i} {
+    font-size: #{$i}px !important;
+  }
+  .text-#{$i}rem {
+    font-size: #{$i}rem !important;
+  }
+  .mt-#{$i} {
+    margin-top: #{$i}px !important;
+  }
+  .mb-#{$i} {
+    margin-bottom: #{$i}px !important;
+  }
+  .mtb-#{$i} {
+    margin-bottom: #{$i}px !important;
+    margin-top: #{$i}px !important;
+  }
+  .ml-#{$i} {
+    margin-left: #{$i}px !important;
+  }
+  .mr-#{$i} {
+    margin-right: #{$i}px !important;
+  }
+  .mlr-#{$i} {
+    margin-left: #{$i}px !important;
+    margin-right: #{$i}px !important;
+  }
+  .m-#{$i} {
+    margin: #{$i}px !important;
+  }
+  .pt-#{$i} {
+    padding-top: #{$i}px !important;
+  }
+  .pb-#{$i} {
+    padding-bottom: #{$i}px !important;
+  }
+  .ptb-#{$i} {
+    padding-bottom: #{$i}px !important;
+    padding-top: #{$i}px !important;
+  }
+  .pl-#{$i} {
+    padding-left: #{$i}px !important;
+  }
+  .pr-#{$i} {
+    padding-right: #{$i}px !important;
+  }
+  .plr-#{$i} {
+    padding-left: #{$i}px !important;
+    padding-right: #{$i}px !important;
+  }
+  .p-#{$i} {
+    padding: #{$i}px !important;
+  }
+  .mw-#{$i} {
+    max-width: #{$i}px !important;
+  }
+}
+
+.view {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
