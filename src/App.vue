@@ -3,12 +3,10 @@
     <div style="align-items: center; justify-content: center; width: 100%; display: flex;" class="p-24">
       <img class="logo" alt="title-image" src="./assets/Whos-that-pokemon.png">
     </div>
-    <nav>
-      <router-link to="/">New game</router-link> |
-      <router-link to="/register">Register</router-link> |
-      <router-link to="/profile">Profile</router-link> |
-      <router-link to="/login">Login</router-link> |
-      <router-link to="/leaderboard">Leaderboard</router-link>
+    <nav class="text-center" v-if="!['/login', '/register'].includes($route.path)">
+      <router-link class="button nav-button text-18 m-12" :class="$route.path === '/' ? 'active' : ''" to="/">Play</router-link>
+      <router-link class="button nav-button text-18 m-12" :class="$route.path === '/profile' ? 'active' : ''" to="/profile">Profile</router-link>
+      <router-link class="button nav-button text-18 m-12" :class="$route.path === '/leaderboard' ? 'active' : ''" to="/leaderboard">Leaderboard</router-link>
     </nav>
     <router-view/>
   </div>
