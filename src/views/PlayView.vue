@@ -66,7 +66,7 @@ import http from '@/http'
 import PokemonInput from '@/components/PokemonInput.vue'
 
 const TIME = 60
-const TOTAL_POKEMON = 247
+const TOTAL_POKEMON = 246
 
 export default {
   name: 'PlayView',

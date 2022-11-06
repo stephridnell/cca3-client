@@ -31,9 +31,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "leaderboard" */ '../views/LeaderboardView.vue')
   },
   {
-    path: '/profile',
-    name: 'profile',
-    component: () => import(/* webpackChunkName: "profile" */ '../views/ProfileView.vue')
+    path: '/pokedex',
+    name: 'pokedex',
+    component: () => import(/* webpackChunkName: "pokedex" */ '../views/ProfileView.vue')
   }
 ]
 
