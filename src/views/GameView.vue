@@ -12,7 +12,7 @@
               <div class="p-8">Get <strong>+2 seconds</strong> for each correct answer</div>
               <div class="p-8">Click <strong>pass</strong> if you don't know the answer</div>
             </div>
-            <div class="p-12">
+            <div class="p-12 text-20">
               Ready?
             </div>
             <div class="p-12">

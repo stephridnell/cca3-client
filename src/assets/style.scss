@@ -4,6 +4,7 @@
   --text-dark:  #37384c;
   --text-light: #fff;
   --red: rgba(255,121,114,1);
+  --green: #00f0b0;
 }
 
 body {
@@ -115,7 +116,7 @@ button, .button {
 .encounter-grid {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .encounter {
@@ -188,16 +189,8 @@ a {
   color: var(--red);
 }
 
-.blue {
-  color: #73ffee;
-}
-
-.yellow {
-  color: #ffcc70;
-}
-
-.white {
-  color: #fff;
+.green {
+  color: var(--green);
 }
 
 .greyscale {
