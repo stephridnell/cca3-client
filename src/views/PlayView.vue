@@ -62,11 +62,14 @@
 import http from '@/http'
 import PokemonInput from '@/components/PokemonInput.vue'
 
+const TIME = 60
+const TOTAL_POKEMON = 247
+
 export default {
   name: 'PlayView',
   data: () => {
     return {
-      timeLeft: 10,
+      timeLeft: TIME,
       gameTimer: null,
       currentPokemon: null,
       fullValue: '',
@@ -119,7 +122,7 @@ export default {
     restart () {
       this.results = []
       this.fullValue = ''
-      this.timeLeft = 10
+      this.timeLeft = TIME
       this.currentPokemon = this.getRandomPokemon()
       this.start()
     },
@@ -149,7 +152,7 @@ export default {
       }
     },
     getRandomPokemon () {
-      const randomNumber = Math.floor(Math.random() * (251 - 1 + 1) + 1)
+      const randomNumber = Math.floor(Math.random() * (TOTAL_POKEMON - 1 + 1) + 1)
       return this.pokemon[randomNumber]
     },
     addTime () {
