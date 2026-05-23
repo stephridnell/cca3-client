@@ -3,15 +3,21 @@
     <div class="container p-8">
       <div class="card" style="max-width: 824px">
         <div class="card-body plr-32 ptb-12">
-          <div class="card-header pb-12">
-            Who's that pokemon?
-          </div>
+          <div class="card-header pb-12">Who's that pokemon?</div>
           <template v-if="!gameComplete">
             <div class="text-64" v-if="timeLeft >= 0">
               {{ timeLeft }}
             </div>
             <template v-if="currentPokemon">
-              <img style="width: 300px; max-width: 100%; filter: brightness(0%); margin-bottom:20px;" :src="currentPokemon.imageUrl">
+              <img
+                style="
+                  width: 300px;
+                  max-width: 100%;
+                  filter: brightness(0%);
+                  margin-bottom: 20px;
+                "
+                :src="currentPokemon.imageUrl"
+              />
               <div class="pokemon-input-container">
                 <pokemon-input
                   :key="currentPokemon.name"
@@ -23,10 +29,14 @@
               </div>
             </template>
 
-            <div class="text-14 mt-40" style="text-align:center;">
+            <div class="text-14 mt-40" style="text-align: center">
               Hint
-              <div style="display:flex;">
-                <div style="width: 40px" v-for="(char, i) in revealedLetters" :key="char+i">
+              <div style="display: flex">
+                <div
+                  style="width: 40px"
+                  v-for="(char, i) in revealedLetters"
+                  :key="char + i"
+                >
                   {{ char }}
                 </div>
               </div>
@@ -36,28 +46,35 @@
               <button class="button text-20 text-bold" @click="pass">
                 Pass
               </button>
-              <div class="text-14">
-                (or press Esc)
-              </div>
+              <div class="text-14">(or press Esc)</div>
             </div>
           </template>
           <template v-else>
             <div>{{ completionText }}</div>
-            <div>Your score: <strong>{{ score }}</strong></div>
+            <div>
+              Your score: <strong>{{ score }}</strong>
+            </div>
             <div class="encounter-grid">
-              <div class="encounter" v-for="(pokemon, index) in results" :key="index">
-                <img style="width:140px;max-width:100%;" :src="pokemon.imageUrl">
+              <div
+                class="encounter"
+                v-for="(pokemon, index) in results"
+                :key="index"
+              >
+                <img
+                  style="width: 140px; max-width: 100%"
+                  :src="pokemon.imageUrl"
+                />
                 <div>
-                  <span class="text-bold" style="text-transform: capitalize;">{{ pokemon.name }}</span>
+                  <span class="text-bold" style="text-transform: capitalize">{{
+                    pokemon.name
+                  }}</span>
                 </div>
                 <div v-if="pokemon.correct" class="green text-20">✔</div>
                 <div v-else class="red text-20">✗</div>
               </div>
             </div>
 
-            <div class="p-12 text-20">
-              Try again?
-            </div>
+            <div class="p-12 text-20">Try again?</div>
             <div class="p-12">
               <button class="button text-20 text-bold" @click="restart">
                 Restart
@@ -71,162 +88,167 @@
 </template>
 
 <script>
-import PokemonInput from '@/components/PokemonInput.vue'
-import { recordGame } from '@/storage'
+import PokemonInput from "@/components/PokemonInput.vue";
+import { recordGame } from "@/storage";
 
-const TIME = 60
+const TIME = 60;
 
 export default {
-  name: 'PlayView',
+  name: "PlayView",
   data: () => {
     return {
       timeLeft: TIME,
       gameTimer: null,
       letterRevealTimer: null,
       currentPokemon: null,
-      fullValue: '',
+      fullValue: "",
       results: [],
       gameComplete: false,
-      completionText: '',
+      completionText: "",
       revealedLetters: [],
       currentNameLength: 0,
       completionTextOptions: [
-        'Nice!',
-        'Gotta catch em all!',
-        'Professor Oak would be proud',
-        'You gave Garry a run for his money',
-        'Well done',
-        'You did it!'
-      ]
-    }
+        "Nice!",
+        "Gotta catch em all!",
+        "Professor Oak would be proud",
+        "You gave Garry a run for his money",
+        "Well done",
+        "You did it!",
+      ],
+    };
   },
   components: {
-    PokemonInput
+    PokemonInput,
   },
-  mounted () {
+  mounted() {
     if (this.pokemon.length === 0) {
-      this.$router.push('/')
-      return
+      this.$router.push("/");
+      return;
     }
 
-    window.addEventListener('keydown', this.escPass)
+    window.addEventListener("keydown", this.escPass);
 
-    this.getRandomPokemon()
-    this.start()
+    this.getRandomPokemon();
+    this.start();
   },
-  beforeDestroy () {
-    clearInterval(this.gameTimer)
-    clearInterval(this.letterRevealTimer)
-    window.removeEventListener('keydown', this.escPass)
+  beforeDestroy() {
+    clearInterval(this.gameTimer);
+    clearInterval(this.letterRevealTimer);
+    window.removeEventListener("keydown", this.escPass);
   },
   computed: {
-    pokemon () {
-      return this.$store.getters.getPokemon
+    pokemon() {
+      return this.$store.getters.getPokemon;
     },
-    playerName () {
-      return this.$store.getters.playerName
+    playerName() {
+      return this.$store.getters.playerName;
     },
-    score () {
+    score() {
       return this.results.reduce((prev, curr) => {
-        if (curr.correct) prev++
-        return prev
-      }, 0)
-    }
+        if (curr.correct) prev++;
+        return prev;
+      }, 0);
+    },
   },
   methods: {
-    revealLetter () {
-      const hiddenIndeces = []
+    revealLetter() {
+      const hiddenIndeces = [];
       this.revealedLetters.forEach((char, i) => {
-        if (char === '_') {
-          hiddenIndeces.push(i)
+        if (char === "_") {
+          hiddenIndeces.push(i);
         }
-      })
+      });
 
-      const randomNumber = Math.floor(Math.random() * hiddenIndeces.length)
-      const idxToReveal = hiddenIndeces[randomNumber]
-      this.revealedLetters[idxToReveal] = this.currentPokemon.name[idxToReveal]
+      const randomNumber = Math.floor(Math.random() * hiddenIndeces.length);
+      const idxToReveal = hiddenIndeces[randomNumber];
+      this.revealedLetters[idxToReveal] = this.currentPokemon.name[idxToReveal];
     },
-    escPass (event) {
-      if (event.key === 'Escape' && !this.gameComplete) {
-        this.pass()
+    escPass(event) {
+      if (event.key === "Escape" && !this.gameComplete) {
+        this.pass();
       }
     },
-    getRandomCompleteText () {
-      const randomNumber = Math.floor(Math.random() * this.completionTextOptions.length)
-      this.completionText = this.completionTextOptions[randomNumber]
+    getRandomCompleteText() {
+      const randomNumber = Math.floor(
+        Math.random() * this.completionTextOptions.length
+      );
+      this.completionText = this.completionTextOptions[randomNumber];
     },
-    restart () {
-      this.results = []
-      this.fullValue = ''
-      this.timeLeft = TIME
-      this.getRandomPokemon()
-      this.start()
+    restart() {
+      this.results = [];
+      this.fullValue = "";
+      this.timeLeft = TIME;
+      this.getRandomPokemon();
+      this.start();
     },
-    pass () {
+    pass() {
       this.results.push({
         pokemon: this.currentPokemon.id,
         correct: false,
         imageUrl: this.currentPokemon.imageUrl,
-        name: this.currentPokemon.name
-      })
-      this.fullValue = ''
-      this.getRandomPokemon()
+        name: this.currentPokemon.name,
+      });
+      this.fullValue = "";
+      this.getRandomPokemon();
     },
-    async typed (e) {
-      const lc = e.toLowerCase()
+    async typed(e) {
+      const lc = e.toLowerCase();
       if (lc === this.currentPokemon.name) {
-        this.addTime()
+        this.addTime();
         this.results.push({
           pokemon: this.currentPokemon.id,
           correct: true,
           imageUrl: this.currentPokemon.imageUrl,
-          name: this.currentPokemon.name
-        })
-        this.fullValue = ''
-        await this.$nextTick()
-        this.getRandomPokemon()
+          name: this.currentPokemon.name,
+        });
+        this.fullValue = "";
+        await this.$nextTick();
+        this.getRandomPokemon();
       }
     },
-    getRandomPokemon () {
-      const randomNumber = Math.floor(Math.random() * this.pokemon.length)
-      this.currentPokemon = this.pokemon[randomNumber]
-      this.currentNameLength = this.currentPokemon.name.length
-      this.revealedLetters = new Array(this.currentNameLength).fill('_')
+    getRandomPokemon() {
+      const randomNumber = Math.floor(Math.random() * this.pokemon.length);
+      this.currentPokemon = this.pokemon[randomNumber];
+      this.currentNameLength = this.currentPokemon.name.length;
+      this.revealedLetters = new Array(this.currentNameLength).fill("_");
     },
-    addTime () {
-      this.timeLeft += 2
+    addTime() {
+      this.timeLeft += 2;
     },
-    endGame () {
-      recordGame({
-        name: this.playerName || 'anon',
-        results: this.results.map(el => ({ correct: el.correct, pokemon: el.pokemon }))
-      })
-      this.getRandomCompleteText()
-      this.gameComplete = true
+    async endGame() {
       this.results.push({
         pokemon: this.currentPokemon.id,
         correct: false,
         imageUrl: this.currentPokemon.imageUrl,
-        name: this.currentPokemon.name
-      })
+        name: this.currentPokemon.name,
+      });
+      this.getRandomCompleteText();
+      this.gameComplete = true;
+      await recordGame({
+        name: this.playerName || "anon",
+        results: this.results.map((el) => ({
+          correct: el.correct,
+          pokemon: el.pokemon,
+        })),
+      });
     },
-    start () {
-      this.gameComplete = false
+    start() {
+      this.gameComplete = false;
       this.gameTimer = setInterval(() => {
         if (this.timeLeft <= 0) {
-          clearInterval(this.gameTimer)
-          this.endGame()
+          clearInterval(this.gameTimer);
+          this.endGame();
         }
-        this.timeLeft -= 1
-      }, 1000)
+        this.timeLeft -= 1;
+      }, 1000);
 
       this.letterRevealTimer = setInterval(() => {
         if (this.timeLeft <= 0) {
-          clearInterval(this.letterRevealTimer)
+          clearInterval(this.letterRevealTimer);
         }
-        this.revealLetter()
-      }, 1500)
-    }
-  }
-}
+        this.revealLetter();
+      }, 1500);
+    },
+  },
+};
 </script>
