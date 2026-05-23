@@ -12,11 +12,11 @@
             <div class="p-8">Click <strong>pass</strong> or hit <strong>esc</strong> if you don't know the answer</div>
             <div class="p-8">If you need a <strong>hint</strong>, random letters will be revealed every 2 seconds</div>
           </div>
-          <div class="p-12 text-20">
-            Ready?
+          <div class="p-12 w-100">
+            <input class="input" type="text" v-model="name" placeholder="your name" maxlength="20" />
           </div>
           <div class="p-12">
-            <button :disabled="pokemon.length === 0" class="button text-20 text-bold" @click="start">
+            <button :disabled="pokemon.length === 0 || !name.trim()" class="button text-20 text-bold" @click="start">
               Start
             </button>
           </div>
@@ -35,11 +35,12 @@
 <script>
 export default {
   name: 'GameView',
-  data: () => {
+  data () {
     return {
       timeLeft: 3,
       countdownStarted: false,
-      countdownTimer: null
+      countdownTimer: null,
+      name: this.$store.getters.playerName
     }
   },
   beforeDestroy () {
@@ -52,6 +53,7 @@ export default {
   },
   methods: {
     start () {
+      this.$store.commit('setPlayerName', this.name)
       this.countdownStarted = true
       this.countdownTimer = setInterval(() => {
         if (this.timeLeft <= 1) {

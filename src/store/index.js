@@ -1,43 +1,29 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import pokemon from '@/assets/pokemon'
 
 Vue.use(Vuex)
 
-const initialUser = {
-  userId: '',
-  name: '',
-  email: ''
-}
+const PLAYER_NAME_KEY = 'playerName'
 
 export default new Vuex.Store({
   state: {
-    user: initialUser,
-    pokemon: []
+    pokemon,
+    playerName: window.localStorage.getItem(PLAYER_NAME_KEY) || ''
   },
   getters: {
-    currentUser (state) {
-      return state.user
-    },
     getPokemon (state) {
       return state.pokemon
+    },
+    playerName (state) {
+      return state.playerName
     }
   },
   mutations: {
-    // setting the whole user in localstorage as a very budget way of persisting login without using jwt
-    setCurrentUser (state, user) {
-      window.localStorage.setItem('user', JSON.stringify(user))
-      state.user = { ...user }
-    },
-    setPokemon (state, pokemon) {
-      state.pokemon = [...pokemon]
-    },
-    logout (state) {
-      window.localStorage.removeItem('user')
-      state.user = initialUser
+    setPlayerName (state, name) {
+      const trimmed = (name || '').trim()
+      window.localStorage.setItem(PLAYER_NAME_KEY, trimmed)
+      state.playerName = trimmed
     }
-  },
-  actions: {
-  },
-  modules: {
   }
 })

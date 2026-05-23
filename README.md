@@ -1,51 +1,22 @@
-# vue-ui
+# who's that pokemon
 
-## Project setup
+A static Vue 2 game. No backend, no accounts — pokemon data is bundled, sprites come from the public PokeAPI sprite CDN, and scores/encounters live in `localStorage`.
+
+## Develop
+
 ```
 npm install
-```
-
-### Compiles and hot-reloads for development
-```
 npm run serve
 ```
 
-### Compiles and minifies for production
+## Build
+
 ```
 npm run build
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
+Outputs to `dist/`.
 
-# Docker things
+## Deploy (Netlify)
 
-## Local
-
-### build and tag image
-
-`docker build -f Dockerfile -t cca3:latest .`
-
-### run container
-
-`docker run -it -p 80:80 --rm cca3:latest`
-
-## ECR
-
-### Retrieve an authentication token and authenticate Docker client to the registry.
-
-`aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 024044220872.dkr.ecr.ap-southeast-2.amazonaws.com`
-
-### Build image (from folder where Dockerfile is)
-
-`docker build -t cca3-client .`
-
-### Tag image
-
-`docker tag cca3-client:latest 024044220872.dkr.ecr.ap-southeast-2.amazonaws.com/cca3-client:latest`
-
-### Push to ECR
-
-`docker push 024044220872.dkr.ecr.ap-southeast-2.amazonaws.com/cca3-client:latest`
+`netlify.toml` is set up — point Netlify at this repo and it'll build with `npm run build` and publish `dist/`. The SPA fallback redirect is included so refreshing `/play`, `/pokedex`, etc. works.

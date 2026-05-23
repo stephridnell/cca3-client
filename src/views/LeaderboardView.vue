@@ -6,10 +6,13 @@
           <div class="card-header pb-12">
             Leaderboard
           </div>
-          <table class="mb-12">
-            <tr v-for="lbItem in leaderboard" :key="lbItem.userId" :class="lbItem.userId === currentUser.userId ? 'text-bold' : ''">
-              <td class="text-right p-8">{{ lbItem.score }}</td>
-              <td class="p-8">{{ lbItem.user.name }}</td>
+          <div class="mb-12" v-if="leaderboard.length === 0">
+            No scores yet — play a round to start the board.
+          </div>
+          <table class="mb-12" v-else>
+            <tr v-for="(entry, i) in leaderboard" :key="i" :class="entry.name === playerName ? 'text-bold' : ''">
+              <td class="text-right p-8">{{ entry.score }}</td>
+              <td class="p-8">{{ entry.name }}</td>
             </tr>
           </table>
         </div>
@@ -19,23 +22,19 @@
 </template>
 
 <script>
-import http from '@/http'
+import { getLeaderboard } from '@/storage'
 
 export default {
   name: 'LeaderboardView',
-  data: () => {
+  data () {
     return {
-      leaderboard: []
+      leaderboard: getLeaderboard()
     }
   },
   computed: {
-    currentUser () {
-      return this.$store.getters.currentUser
+    playerName () {
+      return this.$store.getters.playerName
     }
-  },
-  async mounted () {
-    const data = await http.get('game/leaderboard')
-    this.leaderboard = data
   }
 }
 </script>

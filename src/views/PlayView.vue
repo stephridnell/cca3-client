@@ -59,7 +59,7 @@
               Try again?
             </div>
             <div class="p-12">
-              <button :disabled="!resultsStored" class="button text-20 text-bold" @click="restart">
+              <button class="button text-20 text-bold" @click="restart">
                 Restart
               </button>
             </div>
@@ -71,11 +71,10 @@
 </template>
 
 <script>
-import http from '@/http'
 import PokemonInput from '@/components/PokemonInput.vue'
+import { recordGame } from '@/storage'
 
 const TIME = 60
-const TOTAL_POKEMON = 246
 
 export default {
   name: 'PlayView',
@@ -89,7 +88,6 @@ export default {
       results: [],
       gameComplete: false,
       completionText: '',
-      resultsStored: false,
       revealedLetters: [],
       currentNameLength: 0,
       completionTextOptions: [
@@ -108,6 +106,7 @@ export default {
   mounted () {
     if (this.pokemon.length === 0) {
       this.$router.push('/')
+      return
     }
 
     window.addEventListener('keydown', this.escPass)
@@ -124,8 +123,8 @@ export default {
     pokemon () {
       return this.$store.getters.getPokemon
     },
-    currentUser () {
-      return this.$store.getters.currentUser
+    playerName () {
+      return this.$store.getters.playerName
     },
     score () {
       return this.results.reduce((prev, curr) => {
@@ -153,7 +152,7 @@ export default {
       }
     },
     getRandomCompleteText () {
-      const randomNumber = Math.floor(Math.random() * (this.completionTextOptions.length + 1))
+      const randomNumber = Math.floor(Math.random() * this.completionTextOptions.length)
       this.completionText = this.completionTextOptions[randomNumber]
     },
     restart () {
@@ -165,7 +164,7 @@ export default {
     },
     pass () {
       this.results.push({
-        pokemon: `${this.currentPokemon.id}`,
+        pokemon: this.currentPokemon.id,
         correct: false,
         imageUrl: this.currentPokemon.imageUrl,
         name: this.currentPokemon.name
@@ -178,7 +177,7 @@ export default {
       if (lc === this.currentPokemon.name) {
         this.addTime()
         this.results.push({
-          pokemon: `${this.currentPokemon.id}`,
+          pokemon: this.currentPokemon.id,
           correct: true,
           imageUrl: this.currentPokemon.imageUrl,
           name: this.currentPokemon.name
@@ -189,7 +188,7 @@ export default {
       }
     },
     getRandomPokemon () {
-      const randomNumber = Math.floor(Math.random() * (TOTAL_POKEMON - 1 + 1) + 1)
+      const randomNumber = Math.floor(Math.random() * this.pokemon.length)
       this.currentPokemon = this.pokemon[randomNumber]
       this.currentNameLength = this.currentPokemon.name.length
       this.revealedLetters = new Array(this.currentNameLength).fill('_')
@@ -197,21 +196,15 @@ export default {
     addTime () {
       this.timeLeft += 2
     },
-    async endGame () {
-      await http.post('game/end', {
-        userId: this.currentUser.userId,
-        results: this.results.map(el => {
-          return {
-            correct: el.correct,
-            pokemon: el.pokemon
-          }
-        })
+    endGame () {
+      recordGame({
+        name: this.playerName || 'anon',
+        results: this.results.map(el => ({ correct: el.correct, pokemon: el.pokemon }))
       })
-      this.resultsStored = true
       this.getRandomCompleteText()
       this.gameComplete = true
       this.results.push({
-        pokemon: `${this.currentPokemon.id}`,
+        pokemon: this.currentPokemon.id,
         correct: false,
         imageUrl: this.currentPokemon.imageUrl,
         name: this.currentPokemon.name
@@ -219,7 +212,6 @@ export default {
     },
     start () {
       this.gameComplete = false
-      this.resultsStored = false
       this.gameTimer = setInterval(() => {
         if (this.timeLeft <= 0) {
           clearInterval(this.gameTimer)
