@@ -47,7 +47,7 @@
           <div v-if="bonusVisible" class="bonus">+2s</div>
         </transition>
         <transition name="pop">
-          <div v-if="missedVisible" class="missed">It escaped!</div>
+          <div v-if="missedVisible" class="escaped">It escaped!</div>
         </transition>
       </div>
 
@@ -471,7 +471,7 @@ export default {
   image-rendering: pixelated;
 }
 
-.missed {
+.escaped {
   position: absolute;
   top: -10px;
   right: -10px;
