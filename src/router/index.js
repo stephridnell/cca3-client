@@ -18,11 +18,6 @@ const routes = [
     path: '/leaderboard',
     name: 'leaderboard',
     component: () => import(/* webpackChunkName: "leaderboard" */ '../views/LeaderboardView.vue')
-  },
-  {
-    path: '/pokedex',
-    name: 'pokedex',
-    component: () => import(/* webpackChunkName: "pokedex" */ '../views/ProfileView.vue')
   }
 ]
 
