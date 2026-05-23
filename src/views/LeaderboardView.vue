@@ -25,24 +25,24 @@
 </template>
 
 <script>
-import { fetchLeaderboard } from "@/storage";
+import { fetchLeaderboard } from '@/storage'
 
 export default {
-  name: "LeaderboardView",
-  data() {
+  name: 'LeaderboardView',
+  data () {
     return {
       leaderboard: [],
-      loading: true,
-    };
+      loading: true
+    }
   },
   computed: {
-    playerName() {
-      return this.$store.getters.playerName;
-    },
+    playerName () {
+      return this.$store.getters.playerName
+    }
   },
-  async mounted() {
-    this.leaderboard = await fetchLeaderboard();
-    this.loading = false;
-  },
-};
+  async mounted () {
+    this.leaderboard = await fetchLeaderboard()
+    this.loading = false
+  }
+}
 </script>

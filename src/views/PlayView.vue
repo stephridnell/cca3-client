@@ -88,167 +88,167 @@
 </template>
 
 <script>
-import PokemonInput from "@/components/PokemonInput.vue";
-import { recordGame } from "@/storage";
+import PokemonInput from '@/components/PokemonInput.vue'
+import { recordGame } from '@/storage'
 
-const TIME = 60;
+const TIME = 60
 
 export default {
-  name: "PlayView",
+  name: 'PlayView',
   data: () => {
     return {
       timeLeft: TIME,
       gameTimer: null,
       letterRevealTimer: null,
       currentPokemon: null,
-      fullValue: "",
+      fullValue: '',
       results: [],
       gameComplete: false,
-      completionText: "",
+      completionText: '',
       revealedLetters: [],
       currentNameLength: 0,
       completionTextOptions: [
-        "Nice!",
-        "Gotta catch em all!",
-        "Professor Oak would be proud",
-        "You gave Garry a run for his money",
-        "Well done",
-        "You did it!",
-      ],
-    };
+        'Nice!',
+        'Gotta catch em all!',
+        'Professor Oak would be proud',
+        'You gave Garry a run for his money',
+        'Well done',
+        'You did it!'
+      ]
+    }
   },
   components: {
-    PokemonInput,
+    PokemonInput
   },
-  mounted() {
+  mounted () {
     if (this.pokemon.length === 0) {
-      this.$router.push("/");
-      return;
+      this.$router.push('/')
+      return
     }
 
-    window.addEventListener("keydown", this.escPass);
+    window.addEventListener('keydown', this.escPass)
 
-    this.getRandomPokemon();
-    this.start();
+    this.getRandomPokemon()
+    this.start()
   },
-  beforeDestroy() {
-    clearInterval(this.gameTimer);
-    clearInterval(this.letterRevealTimer);
-    window.removeEventListener("keydown", this.escPass);
+  beforeDestroy () {
+    clearInterval(this.gameTimer)
+    clearInterval(this.letterRevealTimer)
+    window.removeEventListener('keydown', this.escPass)
   },
   computed: {
-    pokemon() {
-      return this.$store.getters.getPokemon;
+    pokemon () {
+      return this.$store.getters.getPokemon
     },
-    playerName() {
-      return this.$store.getters.playerName;
+    playerName () {
+      return this.$store.getters.playerName
     },
-    score() {
+    score () {
       return this.results.reduce((prev, curr) => {
-        if (curr.correct) prev++;
-        return prev;
-      }, 0);
-    },
+        if (curr.correct) prev++
+        return prev
+      }, 0)
+    }
   },
   methods: {
-    revealLetter() {
-      const hiddenIndeces = [];
+    revealLetter () {
+      const hiddenIndeces = []
       this.revealedLetters.forEach((char, i) => {
-        if (char === "_") {
-          hiddenIndeces.push(i);
+        if (char === '_') {
+          hiddenIndeces.push(i)
         }
-      });
+      })
 
-      const randomNumber = Math.floor(Math.random() * hiddenIndeces.length);
-      const idxToReveal = hiddenIndeces[randomNumber];
-      this.revealedLetters[idxToReveal] = this.currentPokemon.name[idxToReveal];
+      const randomNumber = Math.floor(Math.random() * hiddenIndeces.length)
+      const idxToReveal = hiddenIndeces[randomNumber]
+      this.revealedLetters[idxToReveal] = this.currentPokemon.name[idxToReveal]
     },
-    escPass(event) {
-      if (event.key === "Escape" && !this.gameComplete) {
-        this.pass();
+    escPass (event) {
+      if (event.key === 'Escape' && !this.gameComplete) {
+        this.pass()
       }
     },
-    getRandomCompleteText() {
+    getRandomCompleteText () {
       const randomNumber = Math.floor(
         Math.random() * this.completionTextOptions.length
-      );
-      this.completionText = this.completionTextOptions[randomNumber];
+      )
+      this.completionText = this.completionTextOptions[randomNumber]
     },
-    restart() {
-      this.results = [];
-      this.fullValue = "";
-      this.timeLeft = TIME;
-      this.getRandomPokemon();
-      this.start();
+    restart () {
+      this.results = []
+      this.fullValue = ''
+      this.timeLeft = TIME
+      this.getRandomPokemon()
+      this.start()
     },
-    pass() {
+    pass () {
       this.results.push({
         pokemon: this.currentPokemon.id,
         correct: false,
         imageUrl: this.currentPokemon.imageUrl,
-        name: this.currentPokemon.name,
-      });
-      this.fullValue = "";
-      this.getRandomPokemon();
+        name: this.currentPokemon.name
+      })
+      this.fullValue = ''
+      this.getRandomPokemon()
     },
-    async typed(e) {
-      const lc = e.toLowerCase();
+    async typed (e) {
+      const lc = e.toLowerCase()
       if (lc === this.currentPokemon.name) {
-        this.addTime();
+        this.addTime()
         this.results.push({
           pokemon: this.currentPokemon.id,
           correct: true,
           imageUrl: this.currentPokemon.imageUrl,
-          name: this.currentPokemon.name,
-        });
-        this.fullValue = "";
-        await this.$nextTick();
-        this.getRandomPokemon();
+          name: this.currentPokemon.name
+        })
+        this.fullValue = ''
+        await this.$nextTick()
+        this.getRandomPokemon()
       }
     },
-    getRandomPokemon() {
-      const randomNumber = Math.floor(Math.random() * this.pokemon.length);
-      this.currentPokemon = this.pokemon[randomNumber];
-      this.currentNameLength = this.currentPokemon.name.length;
-      this.revealedLetters = new Array(this.currentNameLength).fill("_");
+    getRandomPokemon () {
+      const randomNumber = Math.floor(Math.random() * this.pokemon.length)
+      this.currentPokemon = this.pokemon[randomNumber]
+      this.currentNameLength = this.currentPokemon.name.length
+      this.revealedLetters = new Array(this.currentNameLength).fill('_')
     },
-    addTime() {
-      this.timeLeft += 2;
+    addTime () {
+      this.timeLeft += 2
     },
-    async endGame() {
+    async endGame () {
       this.results.push({
         pokemon: this.currentPokemon.id,
         correct: false,
         imageUrl: this.currentPokemon.imageUrl,
-        name: this.currentPokemon.name,
-      });
-      this.getRandomCompleteText();
-      this.gameComplete = true;
+        name: this.currentPokemon.name
+      })
+      this.getRandomCompleteText()
+      this.gameComplete = true
       await recordGame({
-        name: this.playerName || "anon",
+        name: this.playerName || 'anon',
         results: this.results.map((el) => ({
           correct: el.correct,
-          pokemon: el.pokemon,
-        })),
-      });
+          pokemon: el.pokemon
+        }))
+      })
     },
-    start() {
-      this.gameComplete = false;
+    start () {
+      this.gameComplete = false
       this.gameTimer = setInterval(() => {
         if (this.timeLeft <= 0) {
-          clearInterval(this.gameTimer);
-          this.endGame();
+          clearInterval(this.gameTimer)
+          this.endGame()
         }
-        this.timeLeft -= 1;
-      }, 1000);
+        this.timeLeft -= 1
+      }, 1000)
 
       this.letterRevealTimer = setInterval(() => {
         if (this.timeLeft <= 0) {
-          clearInterval(this.letterRevealTimer);
+          clearInterval(this.letterRevealTimer)
         }
-        this.revealLetter();
-      }, 1500);
-    },
-  },
-};
+        this.revealLetter()
+      }, 1500)
+    }
+  }
+}
 </script>
