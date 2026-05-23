@@ -46,6 +46,9 @@
         <transition name="pop">
           <div v-if="bonusVisible" class="bonus">+2s</div>
         </transition>
+        <transition name="pop">
+          <div v-if="missedVisible" class="missed">It escaped!</div>
+        </transition>
       </div>
 
       <div class="letter-row">
@@ -146,6 +149,7 @@ import { submitScore } from '@/storage'
 const TIME = 60
 const HINT_INTERVAL = 2000
 const BONUS_DURATION = 700
+const MISSED_DURATION = 1000
 
 export default {
   name: 'PlayView',
@@ -162,7 +166,8 @@ export default {
       gameComplete: false,
       streak: 0,
       revealedLetters: [],
-      bonusVisible: false
+      bonusVisible: false,
+      missedVisible: false
     }
   },
   computed: {
@@ -253,6 +258,10 @@ export default {
       if (!hidden.length) return
       const pick = hidden[Math.floor(Math.random() * hidden.length)]
       this.$set(this.revealedLetters, pick, this.currentPokemon.name[pick])
+      if (hidden.length === 1) {
+        this.pass()
+        this.flashMissed()
+      }
     },
     onTyped () {
       if (!this.currentPokemon) return
@@ -289,6 +298,13 @@ export default {
       this.bonusTimeout = setTimeout(() => {
         this.bonusVisible = false
       }, BONUS_DURATION)
+    },
+    flashMissed () {
+      clearTimeout(this.missedTimeout)
+      this.missedVisible = true
+      this.missedTimeout = setTimeout(() => {
+        this.missedVisible = false
+      }, MISSED_DURATION)
     },
     async endRun () {
       this.gameComplete = true
@@ -453,6 +469,21 @@ export default {
   height: 100%;
   object-fit: contain;
   image-rendering: pixelated;
+}
+
+.missed {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--coral);
+  box-shadow: 0 4px 0 0 var(--coral-deep);
+  font-family: "Fredoka", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: rgb(52, 6, 6);
+  transform: rotate(12deg);
 }
 
 .bonus {
